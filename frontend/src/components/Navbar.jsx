@@ -23,35 +23,40 @@ function Navbar() {
       ) : undefined}
 
       {/* small screen nav  */}
-      {menuOpen === false ? (
-        <div
-          className="hidden max-sm:block max-sm:fixed max-sm:top-1/2 max-sm:left-1/2 
-        max-sm:-translate-x-1/2 max-sm:-translate-y-1/2 max-sm:bg-slate-300 h-[300px] w-[300px] dark:bg-cyan-950 dark:text-white"
-        >
-          <ul className="max-sm:flex-col justify-between items-center gap-8">
-            <li className="px-4 py-8 flex justify-between">
-              <button onClick={toggleTheme}>
-                {theme === "dark" ? (
-                  <LightModeOutlinedIcon className="cursor-pointer hover:scale-105 transition-all duration-200" />
-                ) : (
-                  <DarkModeOutlinedIcon className="cursor-pointer hover:scale-105 transition-all duration-200 " />
-                )}
-              </button>
-              <button onClick={() => setMenuOpen(!menuOpen)}>
-                <CloseOutlinedIcon className="cursor-pointer hover:scale-108" />
-              </button>
-            </li>
-            <li className="px-4 py-8">
-              <Link to="/">Home</Link>
-            </li>
-            <li className="px-4 py-8">
-              <Link to="/dashboard">Dashboard</Link>
-            </li>
-            <li className=" px-4 py-8 bg-slate-300  dark:bg-cyan-950">
-              <Link to="/getstarted">Get Started</Link>
-            </li>
-          </ul>
-        </div>
+      {menuOpen === true ? (
+        <>
+          {" "}
+          <div className="fixed inset-0 bg-cyan-200/30 backdrop-blur-sm z-40"></div>
+          <div
+            className="hidden max-sm:block max-sm:fixed max-sm:top-1/2 max-sm:left-1/2 
+      max-sm:-translate-x-1/2 max-sm:-translate-y-1/2 max-sm:bg-slate-300 
+      h-[400px] w-[300px] dark:bg-cyan-950 dark:text-white z-50 rounded-3xl "
+          >
+            <ul className="max-sm:flex-col justify-between items-center gap-8">
+              <li className="px-4 py-8 flex justify-between">
+                <button onClick={toggleTheme}>
+                  {theme === "dark" ? (
+                    <LightModeOutlinedIcon className="cursor-pointer hover:scale-105 transition-all duration-200" />
+                  ) : (
+                    <DarkModeOutlinedIcon className="cursor-pointer hover:scale-105 transition-all duration-200 " />
+                  )}
+                </button>
+                <button onClick={() => setMenuOpen(!menuOpen)}>
+                  <CloseOutlinedIcon className="cursor-pointer hover:scale-108" />
+                </button>
+              </li>
+              <li className="px-4 py-8">
+                <Link to="/">Home</Link>
+              </li>
+              <li className="px-4 py-8">
+                <Link to="/dashboard">Dashboard</Link>
+              </li>
+              <li className="px-4 py-8 bg-slate-300 dark:bg-cyan-950">
+                <Link to="/getstarted">Get Started</Link>
+              </li>
+            </ul>
+          </div>
+        </>
       ) : undefined}
 
       {/* big screen nav */}

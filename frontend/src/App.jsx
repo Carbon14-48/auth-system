@@ -10,6 +10,8 @@ import HomePage from "./pages/HomePage";
 import GetStartedPage from "./pages/GetStartedPage";
 import Auth from "./routes/Auth";
 import ErrorPage from "./pages/ErrorPage";
+import LoginForm from "./forms/LoginForm";
+import RegisterForm from "./forms/RegisterForm";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -18,8 +20,10 @@ function App() {
           <Route index element={<HomePage />} />
         </Route>
         <Route path="/getstarted" element={<Auth />}>
-          <Route path="" element={<GetStartedPage />} />
+          <Route index element={<LoginForm />} />
+          <Route path="register" element={<RegisterForm />} />
         </Route>
+
         <Route path="*" element={<ErrorPage />} />
       </>
     )
