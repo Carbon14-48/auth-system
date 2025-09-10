@@ -1,9 +1,10 @@
 import React from "react";
+import LoginForm from "../forms/LoginForm";
 
 function GetStartedPage() {
   return (
-    <div className="text-white bg-slate-500 dark:text-white dark:bg-cyan-700">
-      GET STARTED
+    <div className="text-white bg-slate-500 dark:text-white dark:bg-cyan-950">
+      <LoginForm />
     </div>
   );
 }

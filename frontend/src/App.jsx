@@ -8,7 +8,7 @@ import {
 import NavbarPage from "./routes/NavbarPageRouter";
 import HomePage from "./pages/HomePage";
 import GetStartedPage from "./pages/GetStartedPage";
-import FullPageRoute from "./routes/FullPageRoute";
+import Auth from "./routes/Auth";
 import ErrorPage from "./pages/ErrorPage";
 function App() {
   const router = createBrowserRouter(
@@ -17,8 +17,8 @@ function App() {
         <Route path="/" element={<NavbarPage />}>
           <Route index element={<HomePage />} />
         </Route>
-        <Route path="/" element={<FullPageRoute />}>
-          <Route path="getstarted" element={<GetStartedPage />} />
+        <Route path="/getstarted" element={<Auth />}>
+          <Route path="" element={<GetStartedPage />} />
         </Route>
         <Route path="*" element={<ErrorPage />} />
       </>
