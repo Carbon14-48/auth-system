@@ -29,14 +29,21 @@ public class AuthService {
         }
         user.setPassword(encoder.encode(user.getPassword()));
         usersRepo.save(user);
-        return jwtUtil.generateToken(user.getUsername());
+        return jwtUtil.generateToken(user.getUsername(), user.getId());
     }
 
     public String login(Users user) {
         try {
             authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-            return jwtUtil.generateToken(user.getUsername());
+
+            Users dbUser = usersRepo.getUserByUsername(user.getUsername());
+            if (dbUser != null) {
+                return jwtUtil.generateToken(dbUser.getUsername(), dbUser.getId());
+
+            }
+            throw new RuntimeException("User not found");
+
         } catch (Exception e) {
             throw new RuntimeException("Invalid credentials!");
         }

@@ -34,10 +34,23 @@ public class JwtUtil {
         return getExpirationDate(token).before(new Date());
     }
 
-    public String generateToken(String username) {
-        return Jwts.builder().subject(username)
-                .issuedAt(new Date()).expiration(new Date(System.currentTimeMillis() + jwtExpiration))
-                .signWith(getKey()).compact();
+    public int getUserId(String token) {
+        return Jwts.parser()
+                .verifyWith((javax.crypto.SecretKey) getKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .get("userId", Integer.class);
+    }
+
+    public String generateToken(String username, int userId) {
+        return Jwts.builder()
+                .subject(username)
+                .claim("userId", userId)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + jwtExpiration))
+                .signWith(getKey())
+                .compact();
     }
 
     public boolean isTokenValid(String token, String username) {

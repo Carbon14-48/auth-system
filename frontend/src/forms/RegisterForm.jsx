@@ -1,14 +1,18 @@
-import React from "react";
+/* eslint-disable no-unused-vars */
+import React, { use } from "react";
 import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithubSquare } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import { useToken } from "../customHooks/TokenProvider";
+import { useId } from "react";
+import axios from "axios";
 function RegisterForm() {
   const navigate = useNavigate();
-
+  const { token, setToken } = useToken();
+  const { id, setId } = useId();
   const schema = z
     .object({
       email: z.string().email("Please enter a valid email address"),
@@ -55,8 +59,19 @@ function RegisterForm() {
     mode: "onChange",
   });
 
-  const onSubmit = (data) => {
-    console.log("Form submitted:", data);
+  const onSubmit = async (data) => {
+    const { confirmPassword, ...rest } = data;
+    const dataToSend = { ...rest, creationDate: new Date().toISOString() };
+    axios
+      .post("/auth/register", dataToSend)
+      .then((res) => {
+        navigate("/dashboard");
+        setToken(res.data.token);
+        setId(res.data.id);
+      })
+      .catch((err) => {
+        alert(err.response?.data?.error || "Registration failed");
+      });
   };
 
   const handleGoogleAuth = () => {

@@ -12,12 +12,14 @@ import Auth from "./routes/Auth";
 import ErrorPage from "./pages/ErrorPage";
 import LoginForm from "./forms/LoginForm";
 import RegisterForm from "./forms/RegisterForm";
+import Dashboard from "./pages/Dashboard";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
         <Route path="/" element={<NavbarPage />}>
           <Route index element={<HomePage />} />
+          <Route path="dashboard" element={<Dashboard />} />
         </Route>
         <Route path="/auth" element={<Auth />}>
           <Route path="login" element={<LoginForm />} />

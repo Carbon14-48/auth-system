@@ -2,6 +2,7 @@ package backend.backend.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import backend.backend.config.JwtUtil;
 import backend.backend.model.Users;
 import backend.backend.services.AuthService;
 
@@ -17,16 +18,21 @@ public class AuthController {
     @Autowired
     AuthService authService;
 
+    @Autowired
+    JwtUtil jwtUtil;
+
     @PostMapping("/auth/login")
     public Map<String, String> login(@RequestBody Users user) {
 
         String token = authService.login(user);
-        return Map.of("token", token, "message", "Successful LOGIN");
+        int id = jwtUtil.getUserId(token);
+        return Map.of("token", token, "id", "" + id, "message", "Successful LOGIN");
     }
 
     @PostMapping("/auth/register")
     public Map<String, String> register(@RequestBody Users user) {
         String token = authService.register(user);
-        return Map.of("token", token, "message", "Registration successful!");
+        int id = jwtUtil.getUserId(token);
+        return Map.of("token", token, "id", "" + id, "message", "Registration successful!");
     }
 }

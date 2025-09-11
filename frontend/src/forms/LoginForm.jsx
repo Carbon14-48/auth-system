@@ -1,46 +1,21 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc";
-import { FaGithubSquare } from "react-icons/fa";
+import React, { useId } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { FcGoogle } from "react-icons/fc";
+import { FaGithubSquare } from "react-icons/fa";
+import axios from "axios";
+import { useToken } from "../customHooks/TokenProvider";
 
-function RegisterForm() {
+function LoginForm() {
   const navigate = useNavigate();
-
-  const schema = z
-    .object({
-      username: z
-        .string()
-        .min(3, { message: "Username must be at least 3 characters" })
-        .max(20, { message: "Username must be at most 20 characters" })
-        .regex(/^[a-zA-Z0-9_]+$/, {
-          message:
-            "Username can only contain letters, numbers, and underscores",
-        }),
-      email: z.string().email("Please enter a valid email address"),
-      password: z
-        .string()
-        .min(8, { message: "Password must be at least 8 characters" })
-        .regex(/[A-Z]/, {
-          message: "Password must contain at least one uppercase letter",
-        })
-        .regex(/[a-z]/, {
-          message: "Password must contain at least one lowercase letter",
-        })
-        .regex(/[0-9]/, {
-          message: "Password must contain at least one number",
-        })
-        .regex(/[^A-Za-z0-9]/, {
-          message: "Password must contain at least one special character",
-        }),
-      confirmPassword: z.string(),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-      message: "Passwords don't match",
-      path: ["confirmPassword"],
-    });
+  const { token, setToken } = useToken();
+  const { id, setId } = useId();
+  const schema = z.object({
+    username: z.string().min(1, { message: "Username is required" }),
+    password: z.string().min(1, { message: "Password is required" }),
+  });
 
   const {
     register,
@@ -49,7 +24,7 @@ function RegisterForm() {
   } = useForm({
     defaultValues: {
       username: "",
-      email: "",
+      password: "",
     },
     resolver: zodResolver(schema),
     mode: "onChange",
@@ -57,6 +32,16 @@ function RegisterForm() {
 
   const onSubmit = (data) => {
     console.log("Form submitted:", data);
+    axios
+      .post("/auth/login", data)
+      .then((res) => {
+        setId(res.data.id);
+        setToken(res.data.token);
+        navigate("/dashboard");
+      })
+      .catch((err) => {
+        alert(err.response?.data?.error || "Registration failed");
+      });
   };
 
   const handleGoogleAuth = () => {
@@ -96,25 +81,6 @@ function RegisterForm() {
 
         <div>
           <label
-            htmlFor="email"
-            className="block text-sm font-medium mb-2 dark:text-white"
-          >
-            Email:
-          </label>
-          <input
-            {...register("email")}
-            type="email"
-            id="email"
-            className="w-full bg-slate-300 dark:bg-gray-700 dark:text-white p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 h-[36px]"
-            placeholder="Enter your email"
-          />
-          {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-          )}
-        </div>
-
-        <div>
-          <label
             htmlFor="password"
             className="block text-sm font-medium mb-2 dark:text-white"
           >
@@ -134,32 +100,11 @@ function RegisterForm() {
           )}
         </div>
 
-        <div>
-          <label
-            htmlFor="confirmPassword"
-            className="block text-sm font-medium mb-2 dark:text-white"
-          >
-            Confirm Password:
-          </label>
-          <input
-            {...register("confirmPassword")}
-            type="password"
-            id="confirmPassword"
-            className="w-full bg-slate-300 dark:bg-gray-700 dark:text-white p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 h-[36px]"
-            placeholder="Confirm your password"
-          />
-          {errors.confirmPassword && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.confirmPassword.message}
-            </p>
-          )}
-        </div>
-
         <button
           type="submit"
           className="mt-4 p-3 rounded bg-cyan-600 text-white font-medium hover:scale-[1.02] hover:bg-cyan-700 transition-all duration-200 h-12"
         >
-          Create Account
+          Sign In
         </button>
 
         <div className="flex items-center my-4">
@@ -187,13 +132,13 @@ function RegisterForm() {
         </button>
 
         <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-300">
-          <p className="text-sm dark:text-white">Already have an Account?</p>
+          <p className="text-sm dark:text-white">Don't have an Account?</p>
           <button
             type="button"
-            onClick={() => navigate("/auth/login")}
+            onClick={() => navigate("/auth/register")}
             className="bg-cyan-400 hover:scale-[1.02] text-white font-medium rounded-full px-6 py-2 transition-all duration-300"
           >
-            Sign In
+            Register
           </button>
         </div>
       </form>
@@ -201,4 +146,4 @@ function RegisterForm() {
   );
 }
 
-export default RegisterForm;
+export default LoginForm;
