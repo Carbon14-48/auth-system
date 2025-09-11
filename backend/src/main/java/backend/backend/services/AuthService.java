@@ -10,6 +10,8 @@ import backend.backend.config.JwtUtil;
 import backend.backend.model.Users;
 import backend.backend.repos.UsersRepo;
 
+import java.util.Optional;
+
 @Service
 public class AuthService {
 
@@ -24,7 +26,8 @@ public class AuthService {
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     public String register(Users user) {
-        if (usersRepo.getUserByUsername(user.getUsername()).isPresent()) {
+        Optional<Users> existingUser = usersRepo.getUserByUsername(user.getUsername());
+        if (existingUser.isPresent()) {
             throw new RuntimeException("Username already exists!");
         }
         user.setPassword(encoder.encode(user.getPassword()));
@@ -37,10 +40,10 @@ public class AuthService {
             authenticationManager
                     .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
-            Users dbUser = usersRepo.getUserByUsername(user.getUsername());
-            if (dbUser != null) {
+            Optional<Users> dbUserOpt = usersRepo.getUserByUsername(user.getUsername());
+            if (dbUserOpt.isPresent()) {
+                Users dbUser = dbUserOpt.get();
                 return jwtUtil.generateToken(dbUser.getUsername(), dbUser.getId());
-
             }
             throw new RuntimeException("User not found");
 

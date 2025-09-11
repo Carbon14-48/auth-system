@@ -62,8 +62,9 @@ function RegisterForm() {
   const onSubmit = async (data) => {
     const { confirmPassword, ...rest } = data;
     const dataToSend = { ...rest, creationDate: new Date().toISOString() };
+    axios;
     axios
-      .post("/auth/register", dataToSend)
+      .post("http://localhost:8080/auth/register", dataToSend)
       .then((res) => {
         navigate("/dashboard");
         setToken(res.data.token);

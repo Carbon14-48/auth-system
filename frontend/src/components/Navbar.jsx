@@ -1,15 +1,24 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import logo from "../assets/logo.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "../customHooks/ThemeProvider";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import { useToken } from "../customHooks/TokenProvider";
+import Button from "@mui/material/Button";
 function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
-
+  const { token, setToken } = useToken();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setToken(null);
+    navigate("/auth/login");
+  };
   return (
     <nav className="flex justify-between items-center bg-slate-300 dark:bg-cyan-950">
       <img src={logo} alt="Auth-System logo" className="w-[100px] h-[100px]" />
@@ -51,9 +60,15 @@ function Navbar() {
               <li className="px-4 py-8">
                 <Link to="/dashboard">Dashboard</Link>
               </li>
-              <li className="px-4 py-8 bg-slate-300 dark:bg-cyan-950">
-                <Link to="/getstarted">Get Started</Link>
-              </li>
+              {token ? (
+                <button className="bg-cyan-600 hover:scale-103 p-2 text-white dark:text-black">
+                  Log Out
+                </button>
+              ) : (
+                <li className="px-4 py-8 bg-slate-300 dark:bg-cyan-950">
+                  <Link to="/getstarted">Get Started</Link>
+                </li>
+              )}
             </ul>
           </div>
         </>

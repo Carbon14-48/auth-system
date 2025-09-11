@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useId } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -33,7 +34,7 @@ function LoginForm() {
   const onSubmit = (data) => {
     console.log("Form submitted:", data);
     axios
-      .post("/auth/login", data)
+      .post("http://localhost:8080/auth/login", data)
       .then((res) => {
         setId(res.data.id);
         setToken(res.data.token);
