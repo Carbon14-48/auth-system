@@ -77,4 +77,9 @@ public class Users {
     @Column(nullable = true, unique = true)
     private String username;
 
+    public boolean isPresent() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'isPresent'");
+    }
+
 }

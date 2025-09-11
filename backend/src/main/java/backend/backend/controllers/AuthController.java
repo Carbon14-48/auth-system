@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.RestController;
 import backend.backend.model.Users;
 import backend.backend.services.AuthService;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,14 +18,15 @@ public class AuthController {
     AuthService authService;
 
     @PostMapping("/auth/login")
-    public String login(@RequestBody Users user) {
+    public Map<String, String> login(@RequestBody Users user) {
 
-        return authService.login(user);
+        String token = authService.login(user);
+        return Map.of("token", token, "message", "Successful LOGIN");
     }
 
     @PostMapping("/auth/register")
-    public String register(@RequestBody Users user) {
-
-        return authService.register(user);
+    public Map<String, String> register(@RequestBody Users user) {
+        String token = authService.register(user);
+        return Map.of("token", token, "message", "Registration successful!");
     }
 }
