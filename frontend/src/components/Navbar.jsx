@@ -80,7 +80,7 @@ function Navbar() {
         </li>
 
         <li className="px-4 cursor-pointer bg-cyan-400 rounded-full  hover:scale-105 transition-all duration-300 p-2">
-          <Link to="/getstarted">Get Started</Link>
+          <Link to="/auth/login">Get Started</Link>
         </li>
       </ul>
     </nav>

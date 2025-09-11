@@ -12,6 +12,14 @@ function RegisterForm() {
   const schema = z
     .object({
       email: z.string().email("Please enter a valid email address"),
+      username: z
+        .string()
+        .min(3, { message: "Username must be at least 3 characters" })
+        .max(20, { message: "Username must be at most 20 characters" })
+        .regex(/^[a-zA-Z0-9_]+$/, {
+          message:
+            "Username can only contain letters, numbers, and underscores",
+        }),
       password: z
         .string()
         .min(8, { message: "Password must be at least 8 characters" })
@@ -41,6 +49,7 @@ function RegisterForm() {
   } = useForm({
     defaultValues: {
       email: "",
+      username: "",
     },
     resolver: zodResolver(schema),
     mode: "onChange",
@@ -80,6 +89,27 @@ function RegisterForm() {
           />
           {errors.email && (
             <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+          )}
+        </div>
+
+        <div>
+          <label
+            htmlFor="username"
+            className="block text-sm font-medium mb-2 dark:text-white"
+          >
+            Username:
+          </label>
+          <input
+            {...register("username")}
+            type="text"
+            id="username"
+            className="w-full bg-slate-300 dark:bg-gray-700 dark:text-white p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 h-[36px]"
+            placeholder="Choose a username"
+          />
+          {errors.username && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.username.message}
+            </p>
           )}
         </div>
 
@@ -160,7 +190,7 @@ function RegisterForm() {
           <p className="text-sm dark:text-white">Already have an Account?</p>
           <button
             type="button"
-            onClick={() => navigate("/getstarted/")}
+            onClick={() => navigate("/auth/login")}
             className="bg-cyan-400 hover:scale-[1.02] text-white font-medium rounded-full px-6 py-2 transition-all duration-300"
           >
             Sign In

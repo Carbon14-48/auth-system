@@ -19,8 +19,8 @@ function App() {
         <Route path="/" element={<NavbarPage />}>
           <Route index element={<HomePage />} />
         </Route>
-        <Route path="/getstarted" element={<Auth />}>
-          <Route index element={<LoginForm />} />
+        <Route path="/auth" element={<Auth />}>
+          <Route path="login" element={<LoginForm />} />
           <Route path="register" element={<RegisterForm />} />
         </Route>
 

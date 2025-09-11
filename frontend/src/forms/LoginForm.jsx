@@ -1,30 +1,46 @@
 import React from "react";
-import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithubSquare } from "react-icons/fa";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-function LoginForm() {
+function RegisterForm() {
   const navigate = useNavigate();
 
-  const schema = z.object({
-    email: z.string().email("Please enter a valid email address"),
-    password: z
-      .string()
-      .min(8, { message: "Password must be at least 8 characters" })
-      .regex(/[A-Z]/, {
-        message: "Password must contain at least one uppercase letter",
-      })
-      .regex(/[a-z]/, {
-        message: "Password must contain at least one lowercase letter",
-      })
-      .regex(/[0-9]/, { message: "Password must contain at least one number" })
-      .regex(/[^A-Za-z0-9]/, {
-        message: "Password must contain at least one special character",
-      }),
-  });
+  const schema = z
+    .object({
+      username: z
+        .string()
+        .min(3, { message: "Username must be at least 3 characters" })
+        .max(20, { message: "Username must be at most 20 characters" })
+        .regex(/^[a-zA-Z0-9_]+$/, {
+          message:
+            "Username can only contain letters, numbers, and underscores",
+        }),
+      email: z.string().email("Please enter a valid email address"),
+      password: z
+        .string()
+        .min(8, { message: "Password must be at least 8 characters" })
+        .regex(/[A-Z]/, {
+          message: "Password must contain at least one uppercase letter",
+        })
+        .regex(/[a-z]/, {
+          message: "Password must contain at least one lowercase letter",
+        })
+        .regex(/[0-9]/, {
+          message: "Password must contain at least one number",
+        })
+        .regex(/[^A-Za-z0-9]/, {
+          message: "Password must contain at least one special character",
+        }),
+      confirmPassword: z.string(),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: "Passwords don't match",
+      path: ["confirmPassword"],
+    });
 
   const {
     register,
@@ -32,6 +48,7 @@ function LoginForm() {
     formState: { errors },
   } = useForm({
     defaultValues: {
+      username: "",
       email: "",
     },
     resolver: zodResolver(schema),
@@ -40,17 +57,14 @@ function LoginForm() {
 
   const onSubmit = (data) => {
     console.log("Form submitted:", data);
-    // Handle login logic here
   };
 
   const handleGoogleAuth = () => {
     console.log("Google auth clicked");
-    // Handle Google authentication
   };
 
   const handleGithubAuth = () => {
     console.log("Github auth clicked");
-    // Handle Github authentication
   };
 
   return (
@@ -59,6 +73,27 @@ function LoginForm() {
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-4 p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md w-96"
       >
+        <div>
+          <label
+            htmlFor="username"
+            className="block text-sm font-medium mb-2 dark:text-white"
+          >
+            Username:
+          </label>
+          <input
+            {...register("username")}
+            type="text"
+            id="username"
+            className="w-full bg-slate-300 dark:bg-gray-700 dark:text-white p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 h-[36px]"
+            placeholder="Enter your username"
+          />
+          {errors.username && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.username.message}
+            </p>
+          )}
+        </div>
+
         <div>
           <label
             htmlFor="email"
@@ -99,11 +134,32 @@ function LoginForm() {
           )}
         </div>
 
+        <div>
+          <label
+            htmlFor="confirmPassword"
+            className="block text-sm font-medium mb-2 dark:text-white"
+          >
+            Confirm Password:
+          </label>
+          <input
+            {...register("confirmPassword")}
+            type="password"
+            id="confirmPassword"
+            className="w-full bg-slate-300 dark:bg-gray-700 dark:text-white p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 h-[36px]"
+            placeholder="Confirm your password"
+          />
+          {errors.confirmPassword && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.confirmPassword.message}
+            </p>
+          )}
+        </div>
+
         <button
           type="submit"
           className="mt-4 p-3 rounded bg-cyan-600 text-white font-medium hover:scale-[1.02] hover:bg-cyan-700 transition-all duration-200 h-12"
         >
-          Sign In
+          Create Account
         </button>
 
         <div className="flex items-center my-4">
@@ -131,13 +187,13 @@ function LoginForm() {
         </button>
 
         <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-300">
-          <p className="text-sm dark:text-white">Don't have an Account?</p>
+          <p className="text-sm dark:text-white">Already have an Account?</p>
           <button
             type="button"
-            onClick={() => navigate("/getstarted/register")}
+            onClick={() => navigate("/auth/login")}
             className="bg-cyan-400 hover:scale-[1.02] text-white font-medium rounded-full px-6 py-2 transition-all duration-300"
           >
-            Register
+            Sign In
           </button>
         </div>
       </form>
@@ -145,4 +201,4 @@ function LoginForm() {
   );
 }
 
-export default LoginForm;
+export default RegisterForm;
