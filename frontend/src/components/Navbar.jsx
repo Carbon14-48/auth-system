@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import logo from "../assets/logo.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "../customHooks/ThemeProvider";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
@@ -7,8 +6,7 @@ import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { useToken } from "../customHooks/TokenProvider";
-import Button from "@mui/material/Button";
-
+import { SiSemanticuireact } from "react-icons/si";
 function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -22,8 +20,8 @@ function Navbar() {
   };
 
   return (
-    <nav className="flex justify-between items-center bg-slate-300 dark:bg-cyan-950 relative">
-      <img src={logo} alt="Auth-System logo" className="w-[100px] h-[100px]" />
+    <nav className="flex justify-between items-center bg-slate-300 dark:bg-cyan-950 ">
+      <SiSemanticuireact className="w-[80px] h-[80px] fill-black py-3 dark:fill-cyan-300" />
       {!menuOpen && (
         <button
           onClick={() => setMenuOpen(true)}
