@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToken } from "../customHooks/TokenProvider";
-import { useId } from "react";
+import { useId } from "../customHooks/IdProvider";
 import axios from "axios";
 function RegisterForm() {
   const navigate = useNavigate();
@@ -62,16 +62,29 @@ function RegisterForm() {
   const onSubmit = async (data) => {
     const { confirmPassword, ...rest } = data;
     const dataToSend = { ...rest, creationDate: new Date().toISOString() };
-    axios;
     axios
       .post("http://localhost:8080/auth/register", dataToSend)
       .then((res) => {
-        navigate("/dashboard");
-        setToken(res.data.token);
-        setId(res.data.id);
+        console.log("Registration success:", res.data);
+        try {
+          setToken(res.data.token);
+          console.log("Set token done");
+          setId(res.data.id);
+          console.log("Set id done");
+          navigate("/dashboard");
+          console.log("Navigate done");
+        } catch (err) {
+          console.error("Error in then block:", err);
+        }
       })
       .catch((err) => {
-        alert(err.response?.data?.error || "Registration failed");
+        console.log("Registration error:", err.response, err);
+        alert(
+          err.response?.data?.error ||
+            err.response?.data?.message ||
+            err.response?.data ||
+            "Registration failed"
+        );
       });
   };
 

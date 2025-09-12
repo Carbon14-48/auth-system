@@ -8,14 +8,26 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 
 @Entity
 @Table(name = "users")
 @NoArgsConstructor
 public class Users {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(unique = true, nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private String password;
+
+    private Date creationDate;
+
+    @Column(nullable = false, unique = true)
+    private String username;
 
     public int getId() {
         return id;
@@ -45,14 +57,6 @@ public class Users {
         return creationDate;
     }
 
-    public Users(int id, String email, String password, Date creationDate, String username) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.creationDate = creationDate;
-        this.username = username;
-    }
-
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
     }
@@ -71,15 +75,11 @@ public class Users {
                 + ", username=" + username + "]";
     }
 
-    private String email;
-    private String password;
-    private Date creationDate;
-    @Column(nullable = true, unique = true)
-    private String username;
-
-    public boolean isPresent() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isPresent'");
+    public Users(int id, String email, String password, Date creationDate, String username) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.creationDate = creationDate;
+        this.username = username;
     }
-
 }

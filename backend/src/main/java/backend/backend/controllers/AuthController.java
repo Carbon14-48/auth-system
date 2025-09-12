@@ -9,6 +9,8 @@ import backend.backend.services.AuthService;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,9 +34,14 @@ public class AuthController {
     }
 
     @PostMapping("/auth/register")
-    public Map<String, String> register(@RequestBody Users user) {
-        String token = authService.register(user);
-        int id = jwtUtil.getUserId(token);
-        return Map.of("token", token, "id", "" + id, "message", "Registration successful!");
+    public ResponseEntity<?> register(@RequestBody Users user) {
+        try {
+            String token = authService.register(user);
+            int id = jwtUtil.getUserId(token);
+            return ResponseEntity
+                    .ok(Map.of("token", token, "id", String.valueOf(id), "message", "Registration successful!"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+        }
     }
 }

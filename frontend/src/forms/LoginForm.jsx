@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useId } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -8,7 +8,7 @@ import { FcGoogle } from "react-icons/fc";
 import { FaGithubSquare } from "react-icons/fa";
 import axios from "axios";
 import { useToken } from "../customHooks/TokenProvider";
-
+import { useId } from "../customHooks/IdProvider";
 function LoginForm() {
   const navigate = useNavigate();
   const { token, setToken } = useToken();
@@ -41,7 +41,7 @@ function LoginForm() {
         navigate("/dashboard");
       })
       .catch((err) => {
-        alert(err.response?.data?.error || "Registration failed");
+        alert(err.response?.data?.error || "login failed");
       });
   };
 
