@@ -46,7 +46,7 @@ function LoginForm() {
   };
 
   const handleGoogleAuth = () => {
-    console.log("Google auth clicked");
+    window.location.href = "http://localhost:8080/oauth2/authorization/google";
   };
 
   const handleGithubAuth = () => {
