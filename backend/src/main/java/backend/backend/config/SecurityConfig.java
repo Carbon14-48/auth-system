@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -25,6 +26,9 @@ public class SecurityConfig {
     @Autowired
     JwtAuthentificationFilter jwtAuthentificationFilter;
 
+    @Autowired
+    private AuthenticationSuccessHandler oAuth2SuccessHandler;
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -33,7 +37,10 @@ public class SecurityConfig {
                         .permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
-                .csrf(Customizer -> Customizer.disable()).oauth2Login(Customizer.withDefaults())
+                .csrf(Customizer -> Customizer.disable())
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler(oAuth2SuccessHandler) // <-- Attach your handler
+                )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthentificationFilter, UsernamePasswordAuthenticationFilter.class).build();
     }

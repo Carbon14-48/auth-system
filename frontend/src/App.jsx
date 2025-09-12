@@ -12,6 +12,7 @@ import ErrorPage from "./pages/ErrorPage";
 import LoginForm from "./forms/LoginForm";
 import RegisterForm from "./forms/RegisterForm";
 import Dashboard from "./pages/Dashboard";
+import OAuthSuccess from "./customHooks/OAuthSucces";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -24,7 +25,7 @@ function App() {
           <Route path="login" element={<LoginForm />} />
           <Route path="register" element={<RegisterForm />} />
         </Route>
-
+        <Route path="/auth/oauth-success" element={<OAuthSuccess />} />
         <Route path="*" element={<ErrorPage />} />
       </>
     )
