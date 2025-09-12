@@ -93,7 +93,7 @@ function RegisterForm() {
   };
 
   const handleGithubAuth = () => {
-    console.log("Github auth clicked");
+    window.location.href = "http://localhost:8080/oauth2/authorization/github";
   };
 
   return (
