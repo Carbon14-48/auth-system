@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 import NavbarPage from "./routes/NavbarPageRouter";
 import HomePage from "./pages/HomePage";
-import GetStartedPage from "./pages/GetStartedPage";
 import Auth from "./routes/Auth";
 import ErrorPage from "./pages/ErrorPage";
 import LoginForm from "./forms/LoginForm";

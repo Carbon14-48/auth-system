@@ -54,7 +54,7 @@ function LoginForm() {
   };
 
   return (
-    <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+    <div className="self-center">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-4 p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md w-96"
