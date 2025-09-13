@@ -9,14 +9,32 @@ import { FaGithubSquare } from "react-icons/fa";
 import axios from "axios";
 import { useToken } from "../customHooks/TokenProvider";
 import { useId } from "../customHooks/IdProvider";
+import { useState } from "react";
+import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
 function LoginForm() {
   const navigate = useNavigate();
   const { token, setToken } = useToken();
   const { id, setId } = useId();
   const schema = z.object({
     username: z.string().min(1, { message: "Username is required" }),
-    password: z.string().min(1, { message: "Password is required" }),
+    password: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters" })
+      .regex(/[A-Z]/, {
+        message: "Password must contain at least one uppercase letter",
+      })
+      .regex(/[a-z]/, {
+        message: "Password must contain at least one lowercase letter",
+      })
+      .regex(/[0-9]/, {
+        message: "Password must contain at least one number",
+      })
+      .regex(/[^A-Za-z0-9]/, {
+        message: "Password must contain at least one special character",
+      }),
   });
+  const [passVisible, setPassVisible] = useState(false);
 
   const {
     register,
@@ -66,13 +84,16 @@ function LoginForm() {
           >
             Username:
           </label>
-          <input
-            {...register("username")}
-            type="text"
-            id="username"
-            className="w-full bg-slate-300 dark:bg-gray-700 dark:text-white p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 h-[36px]"
-            placeholder="Enter your username"
-          />
+          <div>
+            <input
+              {...register("username")}
+              type="text"
+              id="username"
+              className="w-full bg-slate-300 dark:bg-gray-700 dark:text-white p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 h-[36px]"
+              placeholder="Enter your username"
+            />
+          </div>
+
           {errors.username && (
             <p className="text-red-500 text-sm mt-1">
               {errors.username.message}
@@ -80,20 +101,39 @@ function LoginForm() {
           )}
         </div>
 
-        <div>
+        <div className="relative">
           <label
             htmlFor="password"
             className="block text-sm font-medium mb-2 dark:text-white"
           >
             Password:
           </label>
+
           <input
             {...register("password")}
-            type="password"
+            type={passVisible ? "text" : "password"}
             id="password"
-            className="w-full bg-slate-300 dark:bg-gray-700 dark:text-white p-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-500 h-[36px]"
+            className="w-full bg-slate-300 dark:bg-gray-700 dark:text-white 
+               p-2 pr-10 rounded border border-gray-300 
+               focus:outline-none focus:ring-2 focus:ring-cyan-500 h-[36px]"
             placeholder="Enter your password"
           />
+
+          <button
+            type="button"
+            onClick={() => setPassVisible(!passVisible)}
+            className="absolute right-3 top-1/2 
+               text-gray-600 dark:text-gray-300 
+               cursor-pointer active:translate-y-1 transition-all duration-300"
+          >
+            {passVisible ? (
+              <VisibilityOffOutlinedIcon />
+            ) : (
+              <RemoveRedEyeOutlinedIcon />
+            )}
+          </button>
+        </div>
+        <div>
           {errors.password && (
             <p className="text-red-500 text-sm mt-1">
               {errors.password.message}

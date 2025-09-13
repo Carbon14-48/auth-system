@@ -7,6 +7,7 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { useToken } from "../customHooks/TokenProvider";
 import { SiSemanticuireact } from "react-icons/si";
+
 function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -20,8 +21,24 @@ function Navbar() {
   };
 
   return (
-    <nav className="flex justify-between items-center bg-slate-300 dark:bg-cyan-950 ">
+    <nav
+      className="
+        sticky top-0 z-50
+        flex items-center justify-between
+        px-4
+        border-b border-white/20 dark:border-white/10
+        bg-white/25 dark:bg-cyan-950/25
+        backdrop-blur-xl backdrop-saturate-150 backdrop-contrast-125
+        supports-[backdrop-filter:blur(0px)]:bg-white/10
+        dark:supports-[backdrop-filter:blur(0px)]:bg-cyan-950/10
+        ring-1 ring-white/20 dark:ring-white/10
+        bg-clip-padding
+        isolate
+        shadow-[0_8px_32px_rgba(0,0,0,0.15)]
+      "
+    >
       <SiSemanticuireact className="w-[80px] h-[80px] fill-black py-3 dark:fill-cyan-300" />
+
       {!menuOpen && (
         <button
           onClick={() => setMenuOpen(true)}
@@ -36,15 +53,15 @@ function Navbar() {
           <div
             className="fixed inset-0 bg-cyan-200/30 backdrop-blur-sm z-40"
             onClick={() => setMenuOpen(false)}
-          ></div>
-          <div className="max-sm:block hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-300 h-[400px] w-[300px] dark:bg-cyan-950 dark:text-white z-50 rounded-3xl">
+          />
+          <div className="max-sm:block hidden fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-300/80 dark:bg-cyan-950/80 dark:text-white z-50 rounded-3xl ring-1 ring-white/20 backdrop-blur-md">
             <ul className="flex flex-col justify-between items-center gap-4 h-[350px]">
               <li className="px-4 pt-8 flex justify-between w-full">
                 <button onClick={toggleTheme}>
                   {theme === "dark" ? (
                     <LightModeOutlinedIcon className="cursor-pointer hover:scale-105 transition-all duration-200" />
                   ) : (
-                    <DarkModeOutlinedIcon className="cursor-pointer hover:scale-105 transition-all duration-200 " />
+                    <DarkModeOutlinedIcon className="cursor-pointer hover:scale-105 transition-all duration-200" />
                   )}
                 </button>
                 <button onClick={() => setMenuOpen(false)}>
@@ -63,7 +80,7 @@ function Navbar() {
               </li>
               {token ? (
                 <button
-                  className="px-4 py-2 w-full bg-slate-300 dark:bg-cyan-950"
+                  className="px-4 py-2 w-full bg-slate-300/50 dark:bg-cyan-950/50 rounded-xl ring-1 ring-white/20 backdrop-blur"
                   onClick={() => {
                     handleLogout();
                     setMenuOpen(false);
@@ -72,7 +89,7 @@ function Navbar() {
                   Log Out
                 </button>
               ) : (
-                <li className="px-4 py-2 w-full bg-slate-300 dark:bg-cyan-950 text-center">
+                <li className="px-4 py-2 w-full bg-slate-300/50 dark:bg-cyan-950/50 text-center rounded-xl ring-1 ring-white/20 backdrop-blur">
                   <Link to="/auth/login" onClick={() => setMenuOpen(false)}>
                     Get Started
                   </Link>
@@ -90,7 +107,7 @@ function Navbar() {
             {theme === "dark" ? (
               <LightModeOutlinedIcon className="cursor-pointer hover:scale-105 transition-all duration-200" />
             ) : (
-              <DarkModeOutlinedIcon className="cursor-pointer hover:scale-105 transition-all duration-200 " />
+              <DarkModeOutlinedIcon className="cursor-pointer hover:scale-105 transition-all duration-200" />
             )}
           </button>
         </li>
@@ -102,13 +119,13 @@ function Navbar() {
         </li>
         {token ? (
           <button
-            className="px-4 cursor-pointer bg-cyan-400 rounded-full hover:scale-105 transition-all duration-300 p-2"
+            className="px-4 cursor-pointer bg-cyan-400/80 rounded-full hover:scale-105 transition-all duration-300 p-2 backdrop-blur ring-1 ring-white/30"
             onClick={handleLogout}
           >
             Log Out
           </button>
         ) : (
-          <li className="px-4 cursor-pointer bg-cyan-400 rounded-full hover:scale-105 transition-all duration-300 p-2">
+          <li className="px-4 cursor-pointer bg-cyan-400/80 rounded-full hover:scale-105 transition-all duration-300 p-2 backdrop-blur ring-1 ring-white/30">
             <Link to="/auth/login">Get Started</Link>
           </li>
         )}
